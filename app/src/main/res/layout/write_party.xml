@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:text="파티 이름"
+        android:textStyle="bold"
+        android:textSize="25dp"></TextView>
+
+    <EditText
+        android:id="@+id/partyTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="여기에 제목을 적으세요"
+        android:layout_marginLeft="20dp">
+        ></EditText>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:text="내용"
+        android:textStyle="bold"
+        android:textSize="25dp"></TextView>
+
+    <EditText
+        android:id="@+id/partyBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="여기에 내용을 적으세요"
+        android:layout_marginLeft="20dp">
+        ></EditText>
+
+    <Button
+        android:id="@+id/makeParty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="파티 만들기"
+        android:textSize="20dp">
+
+    </Button>
+</LinearLayout>
