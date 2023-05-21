@@ -16,14 +16,45 @@
         android:textSize="20dp"
         android:textStyle="bold"
         android:textColor="#2C2727"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인원|시간|카테고리|가게이름">
+
+        </TextView>
+        <Button
+            android:id="@+id/show_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="화살표">
+
+        </Button>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/item_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:text="fads\nf\nfds\nfds\n"
+        android:textSize="16dp"
+        android:visibility="gone"
+        />
 
-        android:textSize="16dp" />
+    <Button
+        android:id="@+id/participate_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="참가하기!"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+    </Button>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

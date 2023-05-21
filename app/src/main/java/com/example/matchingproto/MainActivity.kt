@@ -1,6 +1,7 @@
 package com.example.matchingproto
 
 import android.Manifest;
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -29,10 +30,23 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import android.os.Handler
 
-//test추가
+
 class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback{
+    var myID = "김은서" // 임시로 설정해둔 내ID
+
+    // 파베에서 데이터 불러올 주기(ms) 설정
+    private val interval = 5000 // 1초
+
+    // Handler 객체 생성
+    private val handler = Handler()
+
     lateinit var binding: ActivityMainBinding
     lateinit var writebinding:WritePartyBinding
     lateinit var topbinding:TopMenuLayoutBinding
@@ -47,12 +61,16 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
 
+    val partyDB: FirebaseFirestore = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityMainBinding.inflate(layoutInflater)
         writebinding=WritePartyBinding.inflate(layoutInflater)
         topbinding= TopMenuLayoutBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
+
         (supportFragmentManager.findFragmentById(R.id.mapView) as
                 SupportMapFragment?)!!.getMapAsync(this)
 
@@ -91,12 +109,6 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
             .setFastestInterval(1 * 1000) // 1 second
 
 
-        datas.add(ListData("밥 같이 먹을사람1","초밥먹고싶어\n연어덮밥",
-            37.300899,127.0939063))
-        datas.add(ListData("밥","라면먹고싶어",
-            37.298485,127.044458))
-        datas.add(ListData("피자","피자먹고싶어어",
-           37.300773,127.031019))
 
 
         binding.recyclerView.layoutManager=LinearLayoutManager(this)
@@ -114,9 +126,28 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
 
 
         }
+        
+        //임시로 유저id불러오는 버튼 리스너
+        binding.idBtn.setOnClickListener{
+            myID = binding.userId.text.toString()
+        }
+
+        // Runnable 객체 생성
+        val runnable = object : Runnable {
+            override fun run() {
+                datas.clear()
+                getPartyData()
+
+
+                // 일정 시간 간격으로 다시 실행
+                handler.postDelayed(this, interval.toLong())
+            }
+        }
+        handler.postDelayed(runnable, interval.toLong())
 
     }
 
+    //map 이동하는 메서드
     public fun moveMap(latitude: Double, longitude: Double, title:String){
         googleMap?.clear()
         val latLng = LatLng(latitude, longitude)
@@ -126,6 +157,7 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
             .build()
         googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(position))
 
+        //마커표시
         val markerOption=MarkerOptions()
         markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker2))
         markerOption.position(latLng)
@@ -134,6 +166,11 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
         googleMap?.addMarker(markerOption)
     }
 
+    public fun testIntent(){
+        val intent:Intent = Intent(this,MatchSuccessActivity::class.java)
+        startActivity(intent)
+
+    }
     private fun makeParty(){
         val title=writebinding.partyTitle.text.toString()
         val body=writebinding.partyBody.text.toString()
@@ -154,10 +191,113 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
         } else {
             fetchLocation()
         }
-        datas.add(ListData(title,body,latitude,longitude))
+        //datas.add(ListData(title,body,latitude,longitude))
+        addPartyData(title, body, latitude, longitude)
 
 
     }
+
+    private fun addPartyData(title: String, body:String, latitude: Double, longitude: Double){
+        val partyData = mapOf(
+            "title" to title,
+            "body" to body,
+            "latitude" to latitude,
+            "longitude" to longitude,
+            "organizerID" to myID,
+            "participantID" to "tmp",
+            "participate_check" to false
+        )
+
+        val colRef:CollectionReference= partyDB.collection("party")
+        val docRef:Task<DocumentReference> = colRef.add(partyData)
+        docRef.addOnSuccessListener { documentReference ->
+            val documentId = documentReference.id
+            val intent:Intent = Intent(this,WaitParticipateActivity::class.java)
+            intent.putExtra("partyID",documentId)
+            intent.putExtra("myID",myID)
+            startActivity(intent)
+        }
+        docRef.addOnFailureListener{e ->
+            Log.w("log","에러",e)
+        }
+
+    }
+
+    //party 컬렉션의 모든 문서 데이터를 가져와서 datas 에 업데이트하는 함수
+    private fun getPartyData(){
+        val partyRef=partyDB.collection("party")
+        partyRef.get()
+            .addOnSuccessListener { querySnapshot->
+                for(document in querySnapshot.documents){
+                    if(document!=null){
+                        val partyID = document.id.toString()
+                        val title= document.getString("title").toString()
+                        val body = document.getString("body").toString()
+                        val latitude:Double = document.getDouble("latitude") ?:0.0
+                        val longitude:Double = document.getDouble("longitude") ?:0.0
+
+                        datas.add(ListData(partyID,title,body,latitude,longitude))
+
+                    }
+                    else{
+                        Log.d("log","실패")
+                    }
+                }
+
+            }
+            .addOnFailureListener{exception->
+                Log.d("log","연결실패")
+            }
+            .addOnCompleteListener{
+                (binding.recyclerView.adapter as MyAdapter).notifyDataSetChanged()
+            }
+
+    }
+
+    // 참가자가 참가할 파티의 참가 버튼을 누르면 실행되는 함수
+    // party의 participate_check를 true로 바꾸고 participantID에 자기 ID를 넣는다
+    public fun setParticipate(partyID:String){
+        var mateName:String
+        partyDB.collection("party")
+            .document(partyID)
+            .update(mapOf(
+                "participate_check" to true,
+                "participantID" to myID
+            ))
+
+
+        partyDB.collection("party")
+            .document(partyID)
+            .get()
+            .addOnSuccessListener { document ->
+                if(document !=null){
+                    mateName=document.getString("organizerID").toString()
+                    Log.d("log",mateName)
+                    Log.d("log",partyID)
+                    partyDB.collection("User_Loc")
+                        .document(myID)
+                        .set(
+                            mapOf(
+                                "longitude" to longitude,
+                                "latitude" to latitude
+                            )
+                        )
+                    val intent:Intent = Intent(this,MatchSuccessActivity::class.java)
+                    intent.putExtra("mateName",mateName)
+                    intent.putExtra("myID",myID)
+
+                    startActivity(intent)
+                }
+            }
+            .addOnCompleteListener {
+
+            }
+
+            .addOnFailureListener { exception ->
+                Log.d("log", "Error getting document: $exception")}
+
+    }
+
 
 
     override fun onMapReady(p0: GoogleMap?) {

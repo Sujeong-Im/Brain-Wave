@@ -2,6 +2,7 @@ package com.example.matchingproto
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
@@ -27,6 +28,20 @@ class MyAdapter(val datas: MutableList<ListData>,val main: MainActivity):
             main.moveMap(datas[position].latitude,datas[position].longitude,datas[position].title)
 
         }
+        binding.showBody.setOnClickListener{
+            binding.itemBody.visibility= View.VISIBLE
+            binding.participateBtn.visibility=View.VISIBLE
+        }
+
+        binding.participateBtn.setOnClickListener{
+            Log.d("log",datas[position].partyID)
+            Log.d("log","내용내용")
+            main.setParticipate(datas[position].partyID)
+
+        }
+
+
+
     }
 
 }
