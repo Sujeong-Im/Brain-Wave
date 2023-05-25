@@ -50,7 +50,6 @@ class WaitParticipateActivity : AppCompatActivity(), OnMapReadyCallback {
                         // ...
                     }
 
-
                     if(participateCheck == true){
                         val participantID = documentData?.get("participantID") as? String
                         if (participantID != null) {
@@ -61,21 +60,29 @@ class WaitParticipateActivity : AppCompatActivity(), OnMapReadyCallback {
                             // ...
                         }
 
+                        partyDB.collection("party")
+                            .document(partyID)
+                            .delete()
+
                         partyDB.collection("User_Loc")
                             .document(myID)
                             .set(
                                 mapOf(
                                     "longitude" to 0.0,
-                                    "latitude" to 0.0
+                                    "latitude" to 0.0,
+                                    "finish_check" to false
                                 )
                             )
+
+
+
                         val intent: Intent = Intent(this,MatchSuccessActivity::class.java)
                         intent.putExtra("mateName",participantID)
                         intent.putExtra("myID",myID)
+                        intent.putExtra("organizerCheck",true)
                         startActivity(intent)
 
                     }
-
 
                 } else {
                     Log.d("Firestore", "Document does not exist")

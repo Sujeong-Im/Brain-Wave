@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.matchingproto.databinding.ActivityMainBinding
@@ -21,11 +23,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.properties.Delegates
 
 class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
     var myID = "김은서" // 임시로 설정해둔 내ID
     lateinit var mateID:String
     lateinit var matchBinding: MatchSuccessBinding
+    var organizerCheck by Delegates.notNull<Boolean>() // 클라이언트가 파티의 주최자인지 참가자인지 판별
+    
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     var mylatitude:Double =0.0
@@ -49,6 +54,8 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
         matchBinding=MatchSuccessBinding.inflate(layoutInflater)
         mateID = intent.getStringExtra("mateName").toString()
         myID= intent.getStringExtra("myID").toString()
+        organizerCheck= intent.getBooleanExtra("organizerCheck",false)
+
         matchBinding.nickname.text=mateID
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create()
@@ -75,6 +82,62 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
         }
         handler.postDelayed(runnable, interval.toLong())
 
+        // 주최자가맞다면 매칭종료버튼이 보이게
+        if(organizerCheck==true){
+            matchBinding.finish.visibility= View.VISIBLE
+        }
+        else{
+            waitFinish()
+        }
+
+        matchBinding.finish.setOnClickListener{
+            finishMatching()
+            Toast.makeText(this, "매칭 종료!", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun finishMatching(){
+        userLocDB.collection("User_Loc")
+            .document(mateID)
+            .update("finish_check",true)
+
+        userLocDB.collection("User_Loc")
+            .document(myID)
+            .delete()
+    }
+
+
+    private fun waitFinish() {
+        userLocDB.collection("User_Loc")
+            .document(myID)
+            .addSnapshotListener { documentSnapshot, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    val documentData = documentSnapshot.data
+
+
+                    val finishCheck = documentData?.get("finish_check") as? Boolean
+                    if (finishCheck != null) {
+                        // finishCheck 사용하는 코드
+                        // ...
+                    } else {
+                        // finishCheck가 null인 경우 처리
+                        // ...
+                    }
+
+                    if (finishCheck == true) {
+                        userLocDB.collection("User_Loc")
+                            .document(myID)
+                            .delete()
+
+                        Toast.makeText(this, "매칭 종료!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
     }
 
     // 상대방의 위치정보를 받아서 내 앱에 업데이트

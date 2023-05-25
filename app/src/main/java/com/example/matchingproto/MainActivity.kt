@@ -257,14 +257,7 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
     // 참가자가 참가할 파티의 참가 버튼을 누르면 실행되는 함수
     // party의 participate_check를 true로 바꾸고 participantID에 자기 ID를 넣는다
     public fun setParticipate(partyID:String){
-        var mateName:String
-        partyDB.collection("party")
-            .document(partyID)
-            .update(mapOf(
-                "participate_check" to true,
-                "participantID" to myID
-            ))
-
+        lateinit var mateName:String
 
         partyDB.collection("party")
             .document(partyID)
@@ -279,23 +272,33 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
                         .set(
                             mapOf(
                                 "longitude" to longitude,
-                                "latitude" to latitude
+                                "latitude" to latitude,
+                                "finish_check" to false
                             )
                         )
-                    val intent:Intent = Intent(this,MatchSuccessActivity::class.java)
-                    intent.putExtra("mateName",mateName)
-                    intent.putExtra("myID",myID)
 
-                    startActivity(intent)
                 }
             }
-            .addOnCompleteListener {
-
-            }
-
             .addOnFailureListener { exception ->
                 Log.d("log", "Error getting document: $exception")}
 
+
+        partyDB.collection("party")
+            .document(partyID)
+            .update(mapOf(
+                "participate_check" to true,
+                "participantID" to myID
+
+            ))
+            .addOnSuccessListener {
+                val intent:Intent = Intent(this,MatchSuccessActivity::class.java)
+                intent.putExtra("mateName",mateName)
+                intent.putExtra("myID",myID)
+                intent.putExtra("organizerCheck",false)
+
+                startActivity(intent)
+
+            }
     }
 
 
