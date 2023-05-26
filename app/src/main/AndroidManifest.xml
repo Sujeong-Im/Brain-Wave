@@ -26,13 +26,33 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity android:name=".MatchSuccessActivity">
-
         </activity>
+
         <activity android:name=".WaitParticipateActivity">
-
         </activity>
+
+        <activity android:name=".Login">
+        </activity>
+
+        <activity android:name=".Main_login">
+        </activity>
+
+
+        <activity android:name=".Register">
+        </activity>
+
+        <activity android:name=".Notice">
+        </activity>
+
+        <activity android:name=".Mypage">
+        </activity>
+
+        <activity android:name=".MainActivity">
+        </activity>
+
+
         <activity
-            android:name=".MainActivity"
+            android:name=".MainPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

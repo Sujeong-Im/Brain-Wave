@@ -1,6 +1,7 @@
 package com.example.matchingproto
 
 import android.Manifest;
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -65,6 +66,12 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //userid가져오기
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        myID = sharedPreferences.getString("email", "").toString()
+
+
         binding=ActivityMainBinding.inflate(layoutInflater)
         writebinding=WritePartyBinding.inflate(layoutInflater)
         topbinding= TopMenuLayoutBinding.inflate(layoutInflater)
