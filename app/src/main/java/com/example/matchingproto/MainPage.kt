@@ -37,6 +37,7 @@ class MainPage : AppCompatActivity() {
         }
 
     }
+
     override fun onBackPressed() {
         if (System.currentTimeMillis() - backPressedTime < backPressThreshold) {
             super.onBackPressed()
