@@ -41,14 +41,6 @@
                 android:text="마이페이지"
                 android:layout_gravity="center" />
         </FrameLayout>
-        <ImageButton
-            android:id="@+id/mainBtn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/main">
-
-        </ImageButton>
 
     </LinearLayout>
 
@@ -140,34 +132,38 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/tv_nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:textSize="17dp"
-                        android:text="000">
-                    </TextView>
+                        android:text="000"
+                        android:textSize="17dp"></TextView>
+
                     <TextView
+                        android:id="@+id/tv_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:textSize="17dp"
-                        android:text="20대">
-                    </TextView>
+                        android:text="20대"
+                        android:textSize="17dp"></TextView>
+
                     <TextView
+                        android:id="@+id/tv_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:textSize="17dp"
-                        android:text="남성">
-                    </TextView>
+                        android:text="남성"
+                        android:textSize="17dp"></TextView>
+
                     <TextView
+                        android:id="@+id/tv_recommendation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:textSize="17dp"
-                        android:text="14개">
-                    </TextView>
+                        android:text="14개"
+                        android:textSize="17dp"></TextView>
                 </LinearLayout>
             </LinearLayout>
 
@@ -175,79 +171,36 @@
         </FrameLayout>
 
     </LinearLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:background="@drawable/border"
-        android:text="사용기록">
-
-    </Button>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:textSize="25dp"
-        android:textColor="@color/black"
-        android:background="@drawable/border"
-        android:text="공지사항">
-
-    </Button>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="100dp"
-        android:layout_gravity="center"
-        android:background="#6C6868">
-
-    </View>
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="70dp">
 
-        <ImageButton
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/party_matching"
-            android:layout_marginRight="10dp">
-        </ImageButton>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            android:text="사용기록">
 
-        <ImageButton
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/matching"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp">
-        </ImageButton>
+        </Button>
 
-        <ImageButton
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/like_icon"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp">
-        </ImageButton>
+        <Button
+            android:id="@+id/notice_btn"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/border"
+            android:gravity="center"
+            android:text="공지사항"
+            android:textColor="@color/black"
+            android:textSize="25dp">
 
-        <ImageButton
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/category"
-            android:backgroundTint="@color/white"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp">
-        </ImageButton>
+        </Button>
 
     </LinearLayout>
+
 </LinearLayout>

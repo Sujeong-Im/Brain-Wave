@@ -1,9 +1,11 @@
 package com.example.matchingproto
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -24,10 +26,16 @@ class MainPage : AppCompatActivity() {
         }
 
         var partyBtn = findViewById<Button>(R.id.party_btn)
+        var autoBtn = findViewById<Button>(R.id.auto_btn)
         partyBtn.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            showAlertDialog(this, "로그인",
+                "로그인을 해야 이용할 수 있습니다.")
         }
+        autoBtn.setOnClickListener{
+            showAlertDialog(this, "로그인",
+                "로그인을 해야 이용할 수 있습니다.")
+        }
+
     }
     override fun onBackPressed() {
         if (System.currentTimeMillis() - backPressedTime < backPressThreshold) {
@@ -40,5 +48,14 @@ class MainPage : AppCompatActivity() {
         }
     }
 
+    // 알림 창 표시 함수
+    fun showAlertDialog(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("확인", null)
+        val dialog = builder.create()
+        dialog.show()
+    }
 
 }
