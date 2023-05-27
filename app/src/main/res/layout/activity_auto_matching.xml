@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AutoMatchingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="left"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/back" >
+        </ImageButton>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="돌아가기"
+            android:layout_marginVertical="16dp"
+            android:textStyle="bold" >
+        </TextView>
+    </LinearLayout>
+    <EditText
+        android:id="@+id/my_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="나의 위치"
+        android:layout_marginLeft="20dp">
+    </EditText>
+    <FrameLayout
+        android:layout_width="350dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_height="380dp"
+        >
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+    <Button
+        android:id="@+id/matchBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="120dp"
+        android:height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginVertical="50dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:background="@drawable/button_blue"
+        android:text="매칭"
+        />
+
+
+</LinearLayout>

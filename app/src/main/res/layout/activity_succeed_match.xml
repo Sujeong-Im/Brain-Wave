@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:paddingHorizontal="20dp"
+    android:layout_gravity="center"
+    android:paddingTop="40dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/rectangle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textColor="#4A4848"
+                android:text="매칭 성공"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="80dp"
+        android:layout_height="400dp"
+        android:layout_gravity="center">
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+    <Button
+        android:id="@+id/chatBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="110dp"
+        android:height="50dp"
+        android:layout_gravity="center"
+        android:text="채팅하기"
+        android:background="@drawable/button_white"
+        android:layout_marginTop="50dp"
+        />
+</LinearLayout>

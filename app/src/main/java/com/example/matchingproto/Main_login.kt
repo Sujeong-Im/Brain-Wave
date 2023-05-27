@@ -31,6 +31,12 @@ class Main_login : ComponentActivity() {
             startActivity(intent)
         }
 
+        var autoBtn = findViewById<Button>(R.id.auto_btn)
+        autoBtn.setOnClickListener{
+            val intent = Intent(this, AutoMatchingActivity::class.java)
+            startActivity(intent)
+        }
+
     }
     override fun onBackPressed() {
         if (System.currentTimeMillis() - backPressedTime < backPressThreshold) {

@@ -33,7 +33,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="100dp"
+        android:layout_marginVertical="60dp"
         android:layout_gravity="center">
 
         <ImageView
@@ -48,10 +48,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-60dp"
-        android:paddingHorizontal="20dp"
+        android:layout_marginTop="-30dp"
+        android:paddingHorizontal="40dp"
         android:orientation="vertical">
-
 
         <TextView
             android:id="@+id/textView4"
@@ -61,7 +60,6 @@
             android:textColor="#FF542F"
             android:textSize="16sp"
             android:textStyle="bold" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -120,12 +118,12 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp">
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp">
 
         <Button
             android:id="@+id/party_btn"
@@ -133,6 +131,7 @@
             android:layout_height="match_parent"
             android:drawableLeft="@drawable/party_matching"
             android:drawablePadding="10dp"
+            android:textStyle="bold"
             android:text="파티 매칭" />
 
         <Button
@@ -141,6 +140,7 @@
             android:layout_height="match_parent"
             android:drawableLeft="@drawable/matching"
             android:drawablePadding="10dp"
+            android:textStyle="bold"
             android:text="실시간 매칭" />
 
 

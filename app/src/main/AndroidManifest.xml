@@ -50,6 +50,14 @@
         <activity android:name=".MainActivity">
         </activity>
 
+        <activity android:name=".AutoMatchingActivity">
+        </activity>
+        <activity android:name=".FoundMatchActivity">
+        </activity>
+        <activity android:name=".SucceedMatchActivity">
+        </activity>
+        <activity android:name=".MainActivity1">
+        </activity>
 
         <activity
             android:name=".MainPage"
