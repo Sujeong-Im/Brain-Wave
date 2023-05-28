@@ -121,7 +121,8 @@
             android:id="@+id/user_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="테스트용 유저아이디 적는곳">
+            android:hint="테스트용 유저아이디 적는곳"
+            android:visibility="gone">
 
         </EditText>
         <Button
@@ -129,7 +130,8 @@
             android:layout_marginLeft="250dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="등록"></Button>
+            android:text="등록"
+            android:visibility="gone"></Button>
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
