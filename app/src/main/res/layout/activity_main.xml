@@ -127,7 +127,7 @@
             android:id="@+id/user_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="테스트용 유저아이디 적는곳"
+            android:hint="테스트용 ID"
             android:visibility="gone">
 
         </EditText>
