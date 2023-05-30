@@ -52,6 +52,8 @@
 
         <activity android:name=".AutoMatchingActivity">
         </activity>
+        <activity android:name=".WaitAutoParticiant">
+        </activity>
         <activity android:name=".FoundMatchActivity">
         </activity>
         <activity android:name=".SucceedMatchActivity">

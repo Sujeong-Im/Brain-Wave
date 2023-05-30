@@ -1,7 +1,9 @@
 package com.example.matchingproto
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -16,10 +18,12 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,7 +44,7 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
     var matelongitude:Double=0.0
 
     // 파베에서 데이터 불러올 주기(ms) 설정
-    private val interval = 1000
+    private val interval = 3000
 
     // Handler 객체 생성
     private val handler = Handler()
@@ -78,9 +82,11 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
 
                 // 일정 시간 간격으로 다시 실행
                 handler.postDelayed(this, interval.toLong())
+
             }
         }
         handler.postDelayed(runnable, interval.toLong())
+
 
         // 주최자가맞다면 매칭종료버튼이 보이게
         if(organizerCheck==true){
@@ -95,6 +101,8 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
             Toast.makeText(this, "매칭 종료!", Toast.LENGTH_SHORT).show()
         }
 
+        mylocationMoveMap()
+
     }
 
     private fun finishMatching(){
@@ -105,6 +113,9 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
         userLocDB.collection("User_Loc")
             .document(myID)
             .delete()
+
+        val intent: Intent = Intent(this,Main_login::class.java)
+        startActivity(intent)
     }
 
 
@@ -135,6 +146,9 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
                             .delete()
 
                         Toast.makeText(this, "매칭 종료!", Toast.LENGTH_SHORT).show()
+                        val intent: Intent = Intent(this,Main_login::class.java)
+                        startActivity(intent)
+
                     }
                 }
             }
@@ -203,6 +217,7 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
                 }
             }
         }, null)
+
     }
 
     private fun makeMarker(latitude:Double,longitude:Double,ID:String){
@@ -216,6 +231,42 @@ class MatchSuccessActivity: AppCompatActivity() , OnMapReadyCallback {
         googleMap?.addMarker(markerOption)
     }
 
+    private fun mylocationMoveMap(){
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                // 위치 가져오기 성공
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    // 위치를 이용한 작업 수행
+                    moveMap(latitude, longitude)
+                } else {
+                    // 위치 정보를 찾을 수 없음
+                }
+            }
+            .addOnFailureListener { exception: Exception ->
+                // 위치 가져오기 실패
+                // 예외 처리
+            }
+    }
+    private fun moveMap(latitude: Double, longitude: Double) {
+        val latLng = LatLng(latitude, longitude)
+        val position = CameraPosition.Builder()
+            .target(latLng)
+            .zoom(14f)
+            .build()
+        googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(position))
+    }
     override fun onMapReady(p0: GoogleMap?) {
         googleMap = p0
 

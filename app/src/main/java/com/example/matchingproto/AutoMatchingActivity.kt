@@ -3,6 +3,7 @@ package com.example.matchingproto
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -31,12 +32,15 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AutoMatchingActivity : AppCompatActivity(), OnMapReadyCallback {
     //var googleMap: GoogleMap? = null
+    val DB: FirebaseFirestore = FirebaseFirestore.getInstance()
     var PERM_FLAG = 99
     val permission = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     lateinit var providerClinet : FusedLocationProviderClient
+    lateinit var myID:String
     private lateinit var mBinding: ActivityAutoMatchingBinding
     private lateinit var mMap: GoogleMap
     lateinit var apiClient : GoogleApiClient
@@ -51,9 +55,19 @@ class AutoMatchingActivity : AppCompatActivity(), OnMapReadyCallback {
         mBinding = ActivityAutoMatchingBinding.inflate(layoutInflater)
         val view = mBinding.root
         setContentView(view)
+        //userid가져오기
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        myID = sharedPreferences.getString("email", "").toString()
+
 
         mBinding.matchBtn.setOnClickListener {
-            val intent = Intent(this@AutoMatchingActivity, FoundMatchActivity::class.java)
+            DB.collection("auto")
+                .document(myID)
+                .set(mapOf("participantID" to "tmp",
+                    "participate_find" to false,
+                    "matchingCheck" to "WAIT"))
+
+            val intent = Intent(this@AutoMatchingActivity, WaitAutoParticiant::class.java)
             startActivity(intent)
         }
         mBinding.backBtn.setOnClickListener {

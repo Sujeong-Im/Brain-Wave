@@ -36,6 +36,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import android.os.Handler
+import com.google.firebase.firestore.FieldValue
 
 
 class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
@@ -152,6 +153,7 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
         }
         handler.postDelayed(runnable, interval.toLong())
 
+        mylocationMoveMap()
     }
 
     //map 이동하는 메서드
@@ -212,7 +214,8 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
             "longitude" to longitude,
             "organizerID" to myID,
             "participantID" to "tmp",
-            "participate_check" to false
+            "participate_check" to false,
+            "current_time" to FieldValue.serverTimestamp()
         )
 
         val colRef:CollectionReference= partyDB.collection("party")
@@ -236,6 +239,9 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
         partyRef.get()
             .addOnSuccessListener { querySnapshot->
                 for(document in querySnapshot.documents){
+                    if(document.id.equals("TESTTMPPARTY")){
+                        continue
+                    }
                     if(document!=null){
                         val partyID = document.id.toString()
                         val title= document.getString("title").toString()
@@ -386,7 +392,42 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
             }
         }
     }
-
+    private fun mylocationMoveMap(){
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                // 위치 가져오기 성공
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    // 위치를 이용한 작업 수행
+                    FirstMoveMap(latitude, longitude)
+                } else {
+                    // 위치 정보를 찾을 수 없음
+                }
+            }
+            .addOnFailureListener { exception: Exception ->
+                // 위치 가져오기 실패
+                // 예외 처리
+            }
+    }
+    private fun FirstMoveMap(latitude: Double, longitude: Double) {
+        val latLng = LatLng(latitude, longitude)
+        val position = CameraPosition.Builder()
+            .target(latLng)
+            .zoom(14f)
+            .build()
+        googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(position))
+    }
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
     }
