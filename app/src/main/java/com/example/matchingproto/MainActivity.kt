@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
 
     // Handler 객체 생성
     private val handler = Handler()
-
     lateinit var binding: ActivityMainBinding
     lateinit var writebinding:WritePartyBinding
     lateinit var topbinding:TopMenuLayoutBinding
@@ -82,6 +81,10 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
         (supportFragmentManager.findFragmentById(R.id.mapView) as
                 SupportMapFragment?)!!.getMapAsync(this)
 
+        binding.backBtn.setOnClickListener {
+            val intent = Intent(this@MainActivity, MainPage::class.java)
+            startActivity(intent)
+        }
         providerClinet=LocationServices.getFusedLocationProviderClient(this)
         apiClient=GoogleApiClient.Builder(this)
             .addApi(LocationServices.API)
@@ -115,8 +118,6 @@ class MainActivity : AppCompatActivity(),GoogleApiClient.ConnectionCallbacks,
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval(10 * 1000) // 10 seconds
             .setFastestInterval(1 * 1000) // 1 second
-
-
 
 
         binding.recyclerView.layoutManager=LinearLayoutManager(this)
